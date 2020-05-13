@@ -1,6 +1,8 @@
+const sjcl = require('sjcl')
+
 window.$(function ($) {
   const SCRIPTSRC = 'https://www.chrishjorth.com/shopify-spambuster-app/dist/spambuster.js'
-  const BACKEND_URL = 'https://v7qqtjkwvj.execute-api.eu-west-1.amazonaws.com/dev'
+  // const BACKEND_URL = 'https://v7qqtjkwvj.execute-api.eu-west-1.amazonaws.com/dev'
   const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
   const RECAPTCHA_TEXT = '' +
     '<div class="mssb-rc-text">' +
@@ -9,7 +11,7 @@ window.$(function ($) {
     '<a href="https://policies.google.com/terms">Terms of Service</a> apply.' +
     '</div>'
 
-  let canSubmitForm = false
+  const canSubmitForm = false
 
   const shop = window.Shopify.shop
 
@@ -44,7 +46,9 @@ window.$(function ($) {
   // If the same person makes the same comment on the site we have a collision ->
   // result is simply that one risks being marked as spam, which makes sense since it is duplication
   const getHash = function (name, email, body, shop) {
-
+    const hash = sjcl.hash.sha256.hash(name + email + body + shop)
+    console.log(hash)
+    return hash
   }
 
   const verifyReCaptcha = function () {
@@ -68,7 +72,7 @@ window.$(function ($) {
 
           console.log(data)
 
-          $.ajax(BACKEND_URL + '/verify', {
+          /* $.ajax(BACKEND_URL + '/verify', {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -86,7 +90,7 @@ window.$(function ($) {
             error: function (jqXHR, textStatus, errorThrown) {
               console.error(textStatus)
             }
-          })
+          }) */
         })
     })
   }
