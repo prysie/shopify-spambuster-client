@@ -38,7 +38,7 @@ window.$(function ($) {
   scriptNode.nonce = nonce
   document.getElementsByTagName('head')[0].appendChild(scriptNode)
 
-  console.log('hmm23')
+  console.log('hmm24')
 
   const $newCommentForm = $('#comment_form')
 
