@@ -1,0 +1,17 @@
+{
+  "name": "shopify-spambuster-client",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+  "author": "Chris Hjorth - contact@chrishjorth.com",
+  "license": "ISC",
+  "devDependencies": {
+    "standard": "^14.3.4",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
