@@ -48,7 +48,8 @@ window.$(function ($) {
   // If the same person makes the same comment on the site we have a collision ->
   // result is simply that one risks being marked as spam, which makes sense since it is duplication
   const getHash = function (name, email, body, shop) {
-    const hash = sjcl.hash.sha256.hash(name + email + body + shop)
+    const out = sjcl.hash.sha256.hash(name + email + body + shop)
+    const hash = sjcl.codec.hex.fromBits(out)
     console.log(hash)
     return hash
   }
