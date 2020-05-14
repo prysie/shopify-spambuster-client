@@ -1,6 +1,6 @@
 const sjcl = require('sjcl')
 
-console.log('Spambuster v0.0.1')
+console.log('Spambuster v0.0.2')
 
 window.$(function ($) {
   const SCRIPTSRC = 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js'
@@ -76,6 +76,8 @@ window.$(function ($) {
             data: JSON.stringify(data),
             processData: false,
             success: function (data) {
+              console.log('test')
+              console.log(data)
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 canSubmitForm = true
