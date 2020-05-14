@@ -1,6 +1,6 @@
 const sjcl = require('sjcl')
 
-console.log('Spambuster v0.0.2')
+console.log('Spambuster v0.0.3')
 
 window.$(function ($) {
   const SCRIPTSRC = 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js'
@@ -75,6 +75,7 @@ window.$(function ($) {
             contentType: 'application/json',
             data: JSON.stringify(data),
             processData: false,
+            dataType: 'text',
             success: function (data) {
               console.log('test')
               console.log(data)
