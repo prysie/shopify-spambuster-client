@@ -26,6 +26,8 @@ window.$(function ($) {
     }
   }
 
+  console.log(rcSiteKey)
+
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
@@ -38,7 +40,7 @@ window.$(function ($) {
   scriptNode.nonce = nonce
   document.getElementsByTagName('head')[0].appendChild(scriptNode)
 
-  console.log('hmm24')
+  console.log('hmm25')
 
   const $newCommentForm = $('#comment_form')
 
