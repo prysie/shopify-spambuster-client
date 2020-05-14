@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 window.$(function ($) {
-  const SCRIPTSRC = 'https://www.chrishjorth.com/shopify-spambuster-app/dist/spambuster.js'
+  const SCRIPTSRC = 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js'
   // const BACKEND_URL = 'https://v7qqtjkwvj.execute-api.eu-west-1.amazonaws.com/dev'
   const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
   const RECAPTCHA_TEXT = '' +
@@ -40,7 +40,7 @@ window.$(function ($) {
   scriptNode.nonce = nonce
   document.getElementsByTagName('head')[0].appendChild(scriptNode)
 
-  console.log('hmm25')
+  console.log('hmm26')
 
   const $newCommentForm = $('#comment_form')
 
