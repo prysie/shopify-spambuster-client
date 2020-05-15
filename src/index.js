@@ -1,6 +1,6 @@
 const sjcl = require('sjcl')
 
-console.log('Spambuster v0.0.3')
+console.log('Spambuster v0.1.0')
 
 window.$(function ($) {
   const SCRIPTSRC = 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js'
@@ -77,14 +77,11 @@ window.$(function ($) {
             processData: false,
             dataType: 'text',
             success: function (data) {
-              console.log('test')
-              console.log(data)
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 canSubmitForm = true
                 $newCommentForm.submit()
               } else {
-                console.log('FAILED')
                 window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
             },
