@@ -1,10 +1,17 @@
 const sjcl = require('sjcl')
 
-console.log('Spambuster v0.1.0')
+const STAGE = 'dev'
+// const STAGE = 'prod'
+
+const config = {
+  BACKEND_URL: STAGE === 'dev' ? 'https://v7qqtjkwvj.execute-api.eu-west-1.amazonaws.com/dev' : 'https://a8w3q11yde.execute-api.eu-west-1.amazonaws.com/prod'
+}
+
+console.log('Spambuster v0.1.0 - ' + STAGE)
 
 window.$(function ($) {
   const SCRIPTSRC = 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js'
-  const BACKEND_URL = 'https://v7qqtjkwvj.execute-api.eu-west-1.amazonaws.com/dev'
+  const BACKEND_URL = config.BACKEND_URL
   const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
   const RECAPTCHA_TEXT = '' +
     '<div class="mssb-rc-text">' +
