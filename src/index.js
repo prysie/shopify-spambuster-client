@@ -93,12 +93,12 @@ window.$(function ($) {
               },
               error: function (jqXHR, textStatus, errorThrown) {
                 console.error(textStatus)
-                window.alert('Error posting the comment. Please try again at a later time.')
               }
             })
           })
       } catch (error) {
-        console.log(error)
+        console.error(error)
+        window.alert('Error posting the comment. Please try again at a later time.')
       }
     })
   }
