@@ -63,38 +63,43 @@ window.$(function ($) {
     }
 
     window.grecaptcha.ready(function () {
-      window.grecaptcha.execute(rcSiteKey, { action: 'blog_comment' })
-        .then(function (token) {
-          const commentName = $('input[name="comment[author]"]', $newCommentForm).val()
-          const commentEmail = $('input[name="comment[email]"]', $newCommentForm).val()
-          const commentBody = $('textarea[name="comment[body]"]', $newCommentForm).val()
+      try {
+        window.grecaptcha.execute(rcSiteKey, { action: 'blog_comment' })
+          .then(function (token) {
+            const commentName = $('input[name="comment[author]"]', $newCommentForm).val()
+            const commentEmail = $('input[name="comment[email]"]', $newCommentForm).val()
+            const commentBody = $('textarea[name="comment[body]"]', $newCommentForm).val()
 
-          const data = {
-            shop: shop,
-            token: token,
-            commentHash: getHash(commentName, commentEmail, commentBody, shop)
-          }
-
-          $.ajax(BACKEND_URL + '/verify', {
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            processData: false,
-            dataType: 'text',
-            success: function (data) {
-              data = JSON.parse(data)
-              if (parseFloat(data.score) > 0.5) {
-                canSubmitForm = true
-                $newCommentForm.submit()
-              } else {
-                window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
-              }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              console.error(textStatus)
+            const data = {
+              shop: shop,
+              token: token,
+              commentHash: getHash(commentName, commentEmail, commentBody, shop)
             }
+
+            $.ajax(BACKEND_URL + '/verify', {
+              method: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify(data),
+              processData: false,
+              dataType: 'text',
+              success: function (data) {
+                data = JSON.parse(data)
+                if (parseFloat(data.score) > 0.5) {
+                  canSubmitForm = true
+                  $newCommentForm.submit()
+                } else {
+                  window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.error(textStatus)
+                window.alert('Error posting the comment. Please try again at a later time.')
+              }
+            })
           })
-        })
+      } catch (error) {
+        console.log(error)
+      }
     })
   }
 
