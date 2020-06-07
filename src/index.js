@@ -5,7 +5,7 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js' : 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster-dev.js'
 }
 
-console.log('Spambuster v0.1.0 - ' + process.env.NODE_ENV)
+console.log('Spambuster v1.0.1 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const SCRIPTSRC = config.SCRIPTSRC
