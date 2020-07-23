@@ -18,7 +18,9 @@ window.$(function ($) {
     ' <a href="https://policies.google.com/terms">Terms of Service</a> apply.' +
     '</div>'
 
-  let canSubmitForm = false
+  let hasForm = false
+  let canSubmitCommentForm = false
+  let canSubmitContactForm = false
 
   const shop = window.Shopify.shop
 
@@ -47,6 +49,8 @@ window.$(function ($) {
 
   const $newCommentForm = $('#comment_form')
 
+  const $contactForm = $('.contact-form')
+
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
   // result is simply that one risks being marked as spam, which makes sense since it is duplication
@@ -56,9 +60,9 @@ window.$(function ($) {
     return hash
   }
 
-  const verifyReCaptcha = function () {
+  const commentVerifyReCaptcha = function () {
     if (!window.grecaptcha) {
-      console.error('Error with Google ReCaptcha')
+      console.error('Error with Google ReCaptcha on comment form')
       return
     }
 
@@ -85,7 +89,7 @@ window.$(function ($) {
               success: function (data) {
                 data = JSON.parse(data)
                 if (parseFloat(data.score) > 0.5) {
-                  canSubmitForm = true
+                  canSubmitCommentForm = true
                   $newCommentForm.submit()
                 } else {
                   window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
@@ -103,16 +107,73 @@ window.$(function ($) {
     })
   }
 
-  if ($newCommentForm.length > 0) {
-    $newCommentForm.on('submit', function () {
-      if (canSubmitForm === false) {
-        setTimeout(verifyReCaptcha, 1)
+  const contactVerifyReCaptcha = function () {
+    if (!window.grecaptcha) {
+      console.error('Error with Google ReCaptcha on contact form')
+      return
+    }
+
+    window.grecaptcha.ready(function () {
+      try {
+        window.grecaptcha.execute(rcSiteKey, { action: 'contact' })
+          .then(function (token) {
+            const data = {
+              shop: shop,
+              token: token
+            }
+
+            $.ajax(BACKEND_URL + '/verifyonly', {
+              method: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify(data),
+              processData: false,
+              dataType: 'text',
+              success: function (data) {
+                data = JSON.parse(data)
+                if (parseFloat(data.score) > 0.5) {
+                  canSubmitContactForm = true
+                  $contactForm.submit()
+                } else {
+                  window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.error(textStatus)
+              }
+            })
+          })
+      } catch (error) {
+        console.error(error)
+        window.alert('Error submitting. Please try again at a later time.')
       }
-      return canSubmitForm
+    })
+  }
+
+  if ($newCommentForm.length > 0) {
+    hasForm = true
+    $newCommentForm.on('submit', function () {
+      if (canSubmitCommentForm === false) {
+        setTimeout(commentVerifyReCaptcha, 1)
+      }
+      return canSubmitCommentForm
     })
 
     $newCommentForm.append(RECAPTCHA_TEXT)
+  }
 
+  if ($contactForm.length > 0) {
+    hasForm = true
+    $contactForm.on('submit', function () {
+      if (canSubmitContactForm === false) {
+        setTimeout(contactVerifyReCaptcha, 1)
+      }
+      return canSubmitContactForm
+    })
+
+    $contactForm.append(RECAPTCHA_TEXT)
+  }
+
+  if (hasForm === true) {
     document.head.insertAdjacentHTML('beforeend', '<style>.grecaptcha-badge { visibility: hidden; }</style>')
   }
 })
