@@ -35,7 +35,7 @@ window.$(function ($) {
       rcSiteKey = rcSiteKey.substring(0, rcSiteKey.indexOf('&'))
 
       const index = script.src.indexOf('contactEnabled=')
-      contactEnabled = script.src.substring(index + 'contactEnabled='.length, script.src.indexOf('&', index))
+      contactEnabled = index > -1 ? script.src.substring(index + 'contactEnabled='.length, script.src.indexOf('&', index)) === 'true' : false
       console.log('contactEnabled: ' + contactEnabled)
     }
   }
