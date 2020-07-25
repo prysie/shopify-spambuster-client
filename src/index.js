@@ -26,12 +26,17 @@ window.$(function ($) {
 
   const scripts = document.getElementsByTagName('script')
   let rcSiteKey = ''
+  let contactEnabled = ''
   for (let i = 0; i < scripts.length; i++) {
     const script = scripts[i]
     const src = script.src.substring(0, script.src.indexOf('?'))
     if (src === SCRIPTSRC) {
       rcSiteKey = script.src.substring((src + '?rcSiteKey=').length)
       rcSiteKey = rcSiteKey.substring(0, rcSiteKey.indexOf('&'))
+
+      const index = script.src.indexOf('contactEnabled=')
+      contactEnabled = script.src.substring(index + 'contactEnabled='.length, script.src.indexOf('&', index))
+      console.log('contactEnabled: ' + contactEnabled)
     }
   }
 
@@ -161,7 +166,8 @@ window.$(function ($) {
     $newCommentForm.append(RECAPTCHA_TEXT)
   }
 
-  if ($contactForm.length > 0) {
+  if ($contactForm.length > 0 && contactEnabled === true) {
+    console.log('go contact')
     hasForm = true
     $contactForm.on('submit', function () {
       if (canSubmitContactForm === false) {
