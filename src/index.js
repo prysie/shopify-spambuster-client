@@ -5,7 +5,7 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js' : 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster-dev.js'
 }
 
-console.log('Spambuster v1.0.1 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.0.0 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const SCRIPTSRC = config.SCRIPTSRC
@@ -36,7 +36,6 @@ window.$(function ($) {
 
       const index = script.src.indexOf('contactEnabled=')
       contactEnabled = index > -1 ? script.src.substring(index + 'contactEnabled='.length, script.src.indexOf('&', index)) === 'true' : false
-      console.log('contactEnabled: ' + contactEnabled)
     }
   }
 
