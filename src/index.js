@@ -5,7 +5,7 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js' : 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster-dev.js'
 }
 
-console.log('Spambuster v2.0.0 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.0 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const SCRIPTSRC = config.SCRIPTSRC
@@ -21,6 +21,8 @@ window.$(function ($) {
   let hasForm = false
   let canSubmitCommentForm = false
   let canSubmitContactForm = false
+  let canSubmitSignupForm = false
+  let canSubmitLoginForm = false
 
   const shop = window.Shopify.shop
 
@@ -52,8 +54,9 @@ window.$(function ($) {
   document.getElementsByTagName('head')[0].appendChild(scriptNode)
 
   const $newCommentForm = $('#comment_form')
-
   const $contactForm = $('.contact-form')
+  const $signupForm = $('#RegisterForm')
+  const $loginForm = $('#customer_login')
 
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
@@ -111,6 +114,47 @@ window.$(function ($) {
     })
   }
 
+  const verifyReCaptcha = function (action, callback) {
+    if (!window.grecaptcha) {
+      console.error('Error with Google ReCaptcha on contact form')
+      return
+    }
+
+    window.grecaptcha.ready(function () {
+      try {
+        window.grecaptcha.execute(rcSiteKey, { action: action })
+          .then(function (token) {
+            const data = {
+              shop: shop,
+              token: token
+            }
+
+            $.ajax(BACKEND_URL + '/verifyonly', {
+              method: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify(data),
+              processData: false,
+              dataType: 'text',
+              success: function (data) {
+                data = JSON.parse(data)
+                if (parseFloat(data.score) > 0.5) {
+                  callback(null)
+                } else {
+                  window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.error(textStatus)
+              }
+            })
+          })
+      } catch (error) {
+        console.error(error)
+        window.alert('Error submitting. Please try again at a later time.')
+      }
+    })
+  }
+
   const contactVerifyReCaptcha = function () {
     if (!window.grecaptcha) {
       console.error('Error with Google ReCaptcha on contact form')
@@ -153,6 +197,26 @@ window.$(function ($) {
     })
   }
 
+  const signupVerifyReCaptcha = function () {
+    verifyReCaptcha('signup', function (error) {
+      if (error !== null) {
+        console.error(error)
+      }
+      canSubmitSignupForm = true
+      $signupForm.submit()
+    })
+  }
+
+  const loginVerifyReCaptcha = function () {
+    verifyReCaptcha('login', function (error) {
+      if (error !== null) {
+        console.error(error)
+      }
+      canSubmitLoginForm = true
+      $loginForm.submit()
+    })
+  }
+
   if ($newCommentForm.length > 0) {
     hasForm = true
     $newCommentForm.on('submit', function () {
@@ -166,7 +230,6 @@ window.$(function ($) {
   }
 
   if ($contactForm.length > 0 && contactEnabled === true) {
-    console.log('go contact')
     hasForm = true
     $contactForm.on('submit', function () {
       if (canSubmitContactForm === false) {
@@ -176,6 +239,32 @@ window.$(function ($) {
     })
 
     $contactForm.append(RECAPTCHA_TEXT)
+  }
+
+  if ($signupForm.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $signupForm.on('submit', function () {
+      if (canSubmitSignupForm === false) {
+        setTimeout(signupVerifyReCaptcha, 1)
+      }
+      return canSubmitSignupForm
+    })
+
+    $signupForm.append(RECAPTCHA_TEXT)
+  }
+
+  if ($loginForm.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $loginForm.on('submit', function () {
+      if (canSubmitLoginForm === false) {
+        setTimeout(loginVerifyReCaptcha, 1)
+      }
+      return canSubmitLoginForm
+    })
+
+    $loginForm.append(RECAPTCHA_TEXT)
   }
 
   if (hasForm === true) {
