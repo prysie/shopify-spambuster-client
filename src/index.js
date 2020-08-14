@@ -54,7 +54,7 @@ window.$(function ($) {
   document.getElementsByTagName('head')[0].appendChild(scriptNode)
 
   const $newCommentForm = $('#comment_form')
-  const $contactForm = $('.contact-form')
+  const $contactForm = $('form.contact-form')
   const $signupForm = $('#RegisterForm')
   const $loginForm = $('#customer_login')
 
