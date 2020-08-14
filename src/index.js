@@ -230,6 +230,7 @@ window.$(function ($) {
   }
 
   if ($contactForm.length > 0 && contactEnabled === true) {
+    console.log($contactForm)
     hasForm = true
     $contactForm.on('submit', function () {
       if (canSubmitContactForm === false) {
