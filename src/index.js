@@ -5,7 +5,7 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js' : 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster-dev.js'
 }
 
-console.log('Spambuster v2.1.0 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.1 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const SCRIPTSRC = config.SCRIPTSRC
@@ -230,7 +230,6 @@ window.$(function ($) {
   }
 
   if ($contactForm.length > 0 && contactEnabled === true) {
-    console.log($contactForm)
     hasForm = true
     $contactForm.on('submit', function () {
       if (canSubmitContactForm === false) {
