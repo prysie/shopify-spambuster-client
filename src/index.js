@@ -30,16 +30,16 @@ window.$(function ($) {
   let rcSiteKey = ''
   let contactEnabled = ''
   for (let i = 0; i < scripts.length; i++) {
-    const scriptSrcSegs = scripts[i].split('/')
+    const scriptSrcSegs = scripts[i].src.split('/')
     const script = scriptSrcSegs[scriptSrcSegs.length - 1]
     console.log(script)
-    const src = script.src.substring(0, script.src.indexOf('?'))
+    const src = script.substring(0, script.indexOf('?'))
     if (src === SCRIPTSRC) {
-      rcSiteKey = script.src.substring((src + '?rcSiteKey=').length)
+      rcSiteKey = script.substring((src + '?rcSiteKey=').length)
       rcSiteKey = rcSiteKey.substring(0, rcSiteKey.indexOf('&'))
 
       const index = script.src.indexOf('contactEnabled=')
-      contactEnabled = index > -1 ? script.src.substring(index + 'contactEnabled='.length, script.src.indexOf('&', index)) === 'true' : false
+      contactEnabled = index > -1 ? script.substring(index + 'contactEnabled='.length, script.indexOf('&', index)) === 'true' : false
     }
   }
 
