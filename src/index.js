@@ -2,10 +2,10 @@ const sjcl = require('sjcl')
 
 const config = {
   BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://a8w3q11yde.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ykrlxfdod7.execute-api.eu-west-1.amazonaws.com/dev',
-  SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster.js' : 'https://www.chrishjorth.com/shopify-spambuster-client/build/spambuster-dev.js'
+  SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
 }
 
-console.log('Spambuster v2.1.1 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.2 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const SCRIPTSRC = config.SCRIPTSRC
@@ -30,7 +30,9 @@ window.$(function ($) {
   let rcSiteKey = ''
   let contactEnabled = ''
   for (let i = 0; i < scripts.length; i++) {
-    const script = scripts[i]
+    const scriptSrcSegs = scripts[i].split('/')
+    const script = scriptSrcSegs[scriptSrcSegs.length - 1]
+    console.log(script)
     const src = script.src.substring(0, script.src.indexOf('?'))
     if (src === SCRIPTSRC) {
       rcSiteKey = script.src.substring((src + '?rcSiteKey=').length)
