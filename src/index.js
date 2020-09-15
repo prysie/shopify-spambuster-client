@@ -32,7 +32,6 @@ window.$(function ($) {
   for (let i = 0; i < scripts.length; i++) {
     const scriptSrcSegs = scripts[i].src.split('/')
     const script = scriptSrcSegs[scriptSrcSegs.length - 1]
-    console.log(script)
     const src = script.substring(0, script.indexOf('?'))
     if (src === SCRIPTSRC) {
       rcSiteKey = script.substring((src + '?rcSiteKey=').length)
