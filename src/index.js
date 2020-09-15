@@ -38,7 +38,7 @@ window.$(function ($) {
       rcSiteKey = script.substring((src + '?rcSiteKey=').length)
       rcSiteKey = rcSiteKey.substring(0, rcSiteKey.indexOf('&'))
 
-      const index = script.src.indexOf('contactEnabled=')
+      const index = script.indexOf('contactEnabled=')
       contactEnabled = index > -1 ? script.substring(index + 'contactEnabled='.length, script.indexOf('&', index)) === 'true' : false
     }
   }
