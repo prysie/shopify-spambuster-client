@@ -5,9 +5,25 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
 }
 
-console.log('Spambuster v2.1.3 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.4 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
+
+  const mnslpPost = (url, data, callback) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', url, true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+
+    xhr.onreadystatechange = () => {
+      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        callback(null, this.responseText)
+        return
+      }
+      callback('mnslpPost request failed.')
+    }
+    xhr.send(JSON.stringify(data))
+  }
+
   const SCRIPTSRC = config.SCRIPTSRC
   const BACKEND_URL = config.BACKEND_URL
   const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
@@ -88,7 +104,7 @@ window.$(function ($) {
               commentHash: getHash(commentName, commentEmail, commentBody, shop)
             }
 
-            $.ajax(BACKEND_URL + '/verify', {
+            /* $.ajax(BACKEND_URL + '/verify', {
               method: 'POST',
               contentType: 'application/json',
               data: JSON.stringify(data),
@@ -105,6 +121,18 @@ window.$(function ($) {
               },
               error: function (jqXHR, textStatus, errorThrown) {
                 console.error(textStatus)
+              }
+            }) */
+            mnslpPost(BACKEND_URL + '/verify', data, (error, data) => {
+              if (error !== null) {
+                throw new Error(error)
+              }
+              data = JSON.parse(data)
+              if (parseFloat(data.score) > 0.5) {
+                canSubmitCommentForm = true
+                $newCommentForm.submit()
+              } else {
+                window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
             })
           })
