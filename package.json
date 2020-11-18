@@ -1,10 +1,10 @@
 {
   "name": "shopify-spambuster-client",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "standard",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production"
   },
