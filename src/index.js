@@ -5,7 +5,7 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
 }
 
-console.log('Spambuster v2.1.5 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.6 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const mnslpPost = (url, data, callback) => {
@@ -16,12 +16,12 @@ window.$(function ($) {
     xhr.setRequestHeader('Content-Type', 'application/json')
 
     xhr.onreadystatechange = () => {
-      console.log(this)
-      if (this.readyState === window.XMLHttpRequest.DONE) {
+      console.log(xhr)
+      if (xhr.readyState === window.XMLHttpRequest.DONE) {
         console.log('DONE')
-        console.log(this)
-        if (this.status === 200) {
-          callback(null, this.responseText)
+        console.log(xhr)
+        if (xhr.status === 200) {
+          callback(null, xhr.responseText)
         } else {
           const error = 'mnslpPost request failed.'
           callback(error)
