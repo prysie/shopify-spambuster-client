@@ -16,7 +16,9 @@ window.$(function ($) {
     xhr.setRequestHeader('Content-Type', 'application/json')
 
     xhr.onreadystatechange = () => {
+      console.log(this)
       if (this.readyState === window.XMLHttpRequest.DONE) {
+        console.log('DONE')
         console.log(this)
         if (this.status === 200) {
           callback(null, this.responseText)
