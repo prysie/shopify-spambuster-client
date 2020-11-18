@@ -5,21 +5,16 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
 }
 
-console.log('Spambuster v2.1.6 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.7 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const mnslpPost = (url, data, callback) => {
-    console.log(url)
-    console.log(data)
     const xhr = new window.XMLHttpRequest()
     xhr.open('POST', url, true)
     xhr.setRequestHeader('Content-Type', 'application/json')
 
     xhr.onreadystatechange = () => {
-      console.log(xhr)
       if (xhr.readyState === window.XMLHttpRequest.DONE) {
-        console.log('DONE')
-        console.log(xhr)
         if (xhr.status === 200) {
           callback(null, xhr.responseText)
         } else {
@@ -165,7 +160,7 @@ window.$(function ($) {
               token: token
             }
 
-            $.ajax(BACKEND_URL + '/verifyonly', {
+            /* $.ajax(BACKEND_URL + '/verifyonly', {
               method: 'POST',
               contentType: 'application/json',
               data: JSON.stringify(data),
@@ -181,6 +176,17 @@ window.$(function ($) {
               },
               error: function (jqXHR, textStatus, errorThrown) {
                 console.error(textStatus)
+              }
+            }) */
+            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
+              if (error !== null) {
+                throw new Error(error)
+              }
+              data = JSON.parse(data)
+              if (parseFloat(data.score) > 0.5) {
+                callback(null)
+              } else {
+                window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
             })
           })
@@ -206,7 +212,7 @@ window.$(function ($) {
               token: token
             }
 
-            $.ajax(BACKEND_URL + '/verifyonly', {
+            /* $.ajax(BACKEND_URL + '/verifyonly', {
               method: 'POST',
               contentType: 'application/json',
               data: JSON.stringify(data),
@@ -223,6 +229,18 @@ window.$(function ($) {
               },
               error: function (jqXHR, textStatus, errorThrown) {
                 console.error(textStatus)
+              }
+            }) */
+            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
+              if (error !== null) {
+                throw new Error(error)
+              }
+              data = JSON.parse(data)
+              if (parseFloat(data.score) > 0.5) {
+                canSubmitContactForm = true
+                $contactForm.submit()
+              } else {
+                window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
             })
           })
