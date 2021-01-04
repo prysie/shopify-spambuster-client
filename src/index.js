@@ -197,7 +197,7 @@ window.$(function ($) {
     })
   }
 
-  const contactVerifyReCaptcha = function () {
+  const contactVerifyReCaptcha = function ($verifyForm) {
     if (!window.grecaptcha) {
       console.error('Error with Google ReCaptcha on contact form')
       return
@@ -238,7 +238,7 @@ window.$(function ($) {
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 canSubmitContactForm = true
-                $contactForm.submit()
+                $verifyForm.submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -286,11 +286,15 @@ window.$(function ($) {
   if ($contactForm.length > 0 && contactEnabled === true) {
     hasForm = true
     $contactForm.on('submit', function (e) {
-      console.log(e)
-      return false
-      if (canSubmitContactForm === false) {
-        setTimeout(contactVerifyReCaptcha, 1)
+      console.log('submit!')
+      const middleMan = function () {
+        contactVerifyReCaptcha(e.target)
       }
+      
+      if (canSubmitContactForm === false) {
+        setTimeout(middleMan, 1)
+      }
+      return false
       return canSubmitContactForm
     })
 
