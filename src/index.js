@@ -285,7 +285,8 @@ window.$(function ($) {
 
   if ($contactForm.length > 0 && contactEnabled === true) {
     hasForm = true
-    $contactForm.on('submit', function () {
+    $contactForm.on('submit', function (e) {
+      console.log(e)
       if (canSubmitContactForm === false) {
         setTimeout(contactVerifyReCaptcha, 1)
       }
