@@ -285,6 +285,12 @@ window.$(function ($) {
 
   if ($contactForm.length > 0 && contactEnabled === true) {
     hasForm = true
+    console.log('GO')
+    $contactForm.forEach(function ($element) {
+      console.log($element)
+    })
+
+
     $contactForm.on('submit', function (e) {
       console.log('submit!')
       console.log($contactForm)
