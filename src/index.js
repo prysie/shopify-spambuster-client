@@ -5,7 +5,7 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
 }
 
-console.log('Spambuster v2.1.7 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.8 - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const mnslpPost = (url, data, callback) => {
@@ -38,7 +38,6 @@ window.$(function ($) {
 
   let hasForm = false
   let canSubmitCommentForm = false
-  // let canSubmitContactForm = false
   let canSubmitSignupForm = false
   let canSubmitLoginForm = false
 
@@ -106,25 +105,6 @@ window.$(function ($) {
               commentHash: getHash(commentName, commentEmail, commentBody, shop)
             }
 
-            /* $.ajax(BACKEND_URL + '/verify', {
-              method: 'POST',
-              contentType: 'application/json',
-              data: JSON.stringify(data),
-              processData: false,
-              dataType: 'text',
-              success: function (data) {
-                data = JSON.parse(data)
-                if (parseFloat(data.score) > 0.5) {
-                  canSubmitCommentForm = true
-                  $newCommentForm.submit()
-                } else {
-                  window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
-                }
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                console.error(textStatus)
-              }
-            }) */
             mnslpPost(BACKEND_URL + '/verify', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
@@ -160,24 +140,6 @@ window.$(function ($) {
               token: token
             }
 
-            /* $.ajax(BACKEND_URL + '/verifyonly', {
-              method: 'POST',
-              contentType: 'application/json',
-              data: JSON.stringify(data),
-              processData: false,
-              dataType: 'text',
-              success: function (data) {
-                data = JSON.parse(data)
-                if (parseFloat(data.score) > 0.5) {
-                  callback(null)
-                } else {
-                  window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
-                }
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                console.error(textStatus)
-              }
-            }) */
             mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
@@ -212,32 +174,12 @@ window.$(function ($) {
               token: token
             }
 
-            /* $.ajax(BACKEND_URL + '/verifyonly', {
-              method: 'POST',
-              contentType: 'application/json',
-              data: JSON.stringify(data),
-              processData: false,
-              dataType: 'text',
-              success: function (data) {
-                data = JSON.parse(data)
-                if (parseFloat(data.score) > 0.5) {
-                  canSubmitContactForm = true
-                  $contactForm.submit()
-                } else {
-                  window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
-                }
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                console.error(textStatus)
-              }
-            }) */
             mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
-                // canSubmitContactForm = true
                 $verifyForm.submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
@@ -287,16 +229,12 @@ window.$(function ($) {
     hasForm = true
 
     $contactForm.on('submit', function (e) {
-      console.log('submit!')
-      
-      // return false
       const middleMan = function () {
         contactVerifyReCaptcha(e.target)
       }
       
-      // if (canSubmitContactForm === false) {
-        setTimeout(middleMan, 1)
-      // }
+      setTimeout(middleMan, 1)
+
       return false // The submit called from the contactVerifyReCaptcha function does not trigger this handler
       // This means that the form can only be submitted if it 
     })
