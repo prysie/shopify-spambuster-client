@@ -286,7 +286,7 @@ window.$(function ($) {
   if ($contactForm.length > 0 && contactEnabled === true) {
     hasForm = true
     console.log('GO')
-    $contactForm.forEach(function ($element) {
+    $contactForm.each(function ($element) {
       console.log($element)
     })
 
