@@ -5,7 +5,7 @@ const config = {
   SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
 }
 
-console.log('Spambuster v2.1.8 - ' + process.env.NODE_ENV)
+console.log('Spambuster v2.1.8test - ' + process.env.NODE_ENV)
 
 window.$(function ($) {
   const mnslpPost = (url, data, callback) => {
