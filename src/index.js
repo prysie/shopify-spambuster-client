@@ -38,7 +38,7 @@ window.$(function ($) {
 
   let hasForm = false
   let canSubmitCommentForm = false
-  let canSubmitContactForm = false
+  // let canSubmitContactForm = false
   let canSubmitSignupForm = false
   let canSubmitLoginForm = false
 
@@ -237,7 +237,7 @@ window.$(function ($) {
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
-                canSubmitContactForm = true
+                // canSubmitContactForm = true
                 $verifyForm.submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
@@ -294,11 +294,11 @@ window.$(function ($) {
         contactVerifyReCaptcha(e.target)
       }
       
-      if (canSubmitContactForm === false) {
+      // if (canSubmitContactForm === false) {
         setTimeout(middleMan, 1)
-      }
+      // }
       return false // The submit called from the contactVerifyReCaptcha function does not trigger this handler
-      // return canSubmitContactForm
+      // This means that the form can only be submitted if it 
     })
 
     $contactForm.append(RECAPTCHA_TEXT)
