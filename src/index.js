@@ -283,31 +283,13 @@ window.$(function ($) {
     $newCommentForm.append(RECAPTCHA_TEXT)
   }
 
-  const handleContactFormSubmit = function (e) {
-    console.log('submit')
-    const middleMan = function () {
-      contactVerifyReCaptcha(e.target)
-    }
-    
-    if (canSubmitContactForm === false) {
-      setTimeout(middleMan, 1)
-    }
-    return false // The submit called from the contactVerifyReCaptcha function does not trigger this handler
-  }
-
   if ($contactForm.length > 0 && contactEnabled === true) {
     hasForm = true
-    console.log('GO')
-    $contactForm.each(function (index, $element) {
-      console.log($element)
-      $element.on('submit', handleContactFormSubmit)
-    })
 
-
-    /* $contactForm.on('submit', function (e) {
+    $contactForm.on('submit', function (e) {
       console.log('submit!')
-      console.log($contactForm)
-      return false
+      
+      // return false
       const middleMan = function () {
         contactVerifyReCaptcha(e.target)
       }
@@ -315,9 +297,9 @@ window.$(function ($) {
       if (canSubmitContactForm === false) {
         setTimeout(middleMan, 1)
       }
-      return false
-      return canSubmitContactForm
-    }) */
+      return false // The submit called from the contactVerifyReCaptcha function does not trigger this handler
+      // return canSubmitContactForm
+    })
 
     $contactForm.append(RECAPTCHA_TEXT)
   }
