@@ -287,6 +287,8 @@ window.$(function ($) {
     hasForm = true
     $contactForm.on('submit', function (e) {
       console.log('submit!')
+      console.log($contactForm)
+      return false
       const middleMan = function () {
         contactVerifyReCaptcha(e.target)
       }
