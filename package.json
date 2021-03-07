@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "standard",
-    "build-dev": "webpack --mode development",
-    "build-prod": "webpack --mode production"
+    "build-dev": "standard && webpack --mode development",
+    "build-prod": "standard && webpack --mode production"
   },
   "author": "Chris Hjorth - contact@chrishjorth.com",
   "license": "ISC",

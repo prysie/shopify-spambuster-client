@@ -76,11 +76,6 @@ const manasloopSpambuster = () => {
   const $signupForm = document.querySelectorAll('#RegisterForm')
   const $loginForm = document.querySelectorAll('#customer_login')
 
-  console.log($newCommentForm)
-  console.log($contactForm)
-  console.log($signupForm)
-  console.log($loginForm)
-
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
   // result is simply that one risks being marked as spam, which makes sense since it is duplication
@@ -90,6 +85,7 @@ const manasloopSpambuster = () => {
     return hash
   }
 
+  // Assumption: only suppor for 1 comment form and this function is only called if such a form is rendered
   const commentVerifyReCaptcha = function () {
     if (!window.grecaptcha) {
       console.error('Error with Google ReCaptcha on comment form')
@@ -100,9 +96,9 @@ const manasloopSpambuster = () => {
       try {
         window.grecaptcha.execute(rcSiteKey, { action: 'blog_comment' })
           .then(function (token) {
-            const commentName = $newCommentForm.querySelectorAll('input[name="comment[author]"]')[0].value
-            const commentEmail = $newCommentForm.querySelectorAll('input[name="comment[email]"]')[0].value
-            const commentBody = $newCommentForm.querySelectorAll('textarea[name="comment[body]"]')[0].value
+            const commentName = $newCommentForm[0].querySelectorAll('input[name="comment[author]"]')[0].value
+            const commentEmail = $newCommentForm[0].querySelectorAll('input[name="comment[email]"]')[0].value
+            const commentBody = $newCommentForm[0].querySelectorAll('textarea[name="comment[body]"]')[0].value
 
             const data = {
               shop: shop,
@@ -117,7 +113,7 @@ const manasloopSpambuster = () => {
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 canSubmitCommentForm = true
-                $newCommentForm.submit()
+                $newCommentForm[0].submit()
               } else {
                 window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -185,7 +181,7 @@ const manasloopSpambuster = () => {
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
-                $verifyForm.submit()
+                $verifyForm[0].submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -204,7 +200,7 @@ const manasloopSpambuster = () => {
         console.error(error)
       }
       canSubmitSignupForm = true
-      $signupForm.submit()
+      $signupForm[0].submit()
     })
   }
 
@@ -214,26 +210,26 @@ const manasloopSpambuster = () => {
         console.error(error)
       }
       canSubmitLoginForm = true
-      $loginForm.submit()
+      $loginForm[0].submit()
     })
   }
 
   if ($newCommentForm.length > 0) {
     hasForm = true
-    $newCommentForm.addEventListener('submit', function () {
+    $newCommentForm[0].addEventListener('submit', function () {
       if (canSubmitCommentForm === false) {
         setTimeout(commentVerifyReCaptcha, 1)
       }
       return canSubmitCommentForm
     })
 
-    $newCommentForm.append(RECAPTCHA_TEXT)
+    $newCommentForm[0].append(RECAPTCHA_TEXT)
   }
 
   if ($contactForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
-    $contactForm.addEventListener('submit', function (e) {
+    $contactForm[0].addEventListener('submit', function (e) {
       const middleMan = function () {
         contactVerifyReCaptcha(e.target)
       }
@@ -244,33 +240,33 @@ const manasloopSpambuster = () => {
       // This means that the form can only be submitted if it
     })
 
-    $contactForm.append(RECAPTCHA_TEXT)
+    $contactForm[0].append(RECAPTCHA_TEXT)
   }
 
   if ($signupForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
-    $signupForm.addEventListener('submit', function () {
+    $signupForm[0].addEventListener('submit', function () {
       if (canSubmitSignupForm === false) {
         setTimeout(signupVerifyReCaptcha, 1)
       }
       return canSubmitSignupForm
     })
 
-    $signupForm.append(RECAPTCHA_TEXT)
+    $signupForm[0].append(RECAPTCHA_TEXT)
   }
 
   if ($loginForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
-    $loginForm.addEventListener('submit', function () {
+    $loginForm[0].addEventListener('submit', function () {
       if (canSubmitLoginForm === false) {
         setTimeout(loginVerifyReCaptcha, 1)
       }
       return canSubmitLoginForm
     })
 
-    $loginForm.append(RECAPTCHA_TEXT)
+    $loginForm[0].append(RECAPTCHA_TEXT)
   }
 
   if (hasForm === true) {
