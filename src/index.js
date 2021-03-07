@@ -29,12 +29,17 @@ const manasloopSpambuster = () => {
   const SCRIPTSRC = config.SCRIPTSRC
   const BACKEND_URL = config.BACKEND_URL
   const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
-  const RECAPTCHA_TEXT = '' +
+  /* const RECAPTCHA_TEXT = '' +
     '<div class="mssb-rc-text">' +
     'This site is protected by reCAPTCHA and the Google' +
     ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
     ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.' +
-    '</div>'
+    '</div>' */
+  const recaptchaTextElement = document.createElement('div')
+  recaptchaTextElement.className = 'mssb-rc-text'
+  recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+    ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+    ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
 
   let hasForm = false
   let canSubmitCommentForm = false
@@ -223,7 +228,7 @@ const manasloopSpambuster = () => {
       return canSubmitCommentForm
     })
 
-    $newCommentForm[0].append(RECAPTCHA_TEXT)
+    $newCommentForm[0].appendChild(recaptchaTextElement)
   }
 
   if ($contactForm.length > 0 && contactEnabled === true) {
@@ -240,7 +245,7 @@ const manasloopSpambuster = () => {
       // This means that the form can only be submitted if it
     })
 
-    $contactForm[0].append(RECAPTCHA_TEXT)
+    $contactForm[0].appendChild(recaptchaTextElement)
   }
 
   if ($signupForm.length > 0 && contactEnabled === true) {
@@ -253,7 +258,7 @@ const manasloopSpambuster = () => {
       return canSubmitSignupForm
     })
 
-    $signupForm[0].append(RECAPTCHA_TEXT)
+    $signupForm[0].appendChild(recaptchaTextElement)
   }
 
   if ($loginForm.length > 0 && contactEnabled === true) {
@@ -266,7 +271,7 @@ const manasloopSpambuster = () => {
       return canSubmitLoginForm
     })
 
-    $loginForm[0].append(RECAPTCHA_TEXT)
+    $loginForm[0].appendChild(recaptchaTextElement)
   }
 
   if (hasForm === true) {
