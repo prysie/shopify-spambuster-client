@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 const manasloopSpambuster = () => {
-  console.log('Spambuster v2.2.2 - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.2.3 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://a8w3q11yde.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ykrlxfdod7.execute-api.eu-west-1.amazonaws.com/dev',
@@ -225,7 +225,8 @@ const manasloopSpambuster = () => {
       if (canSubmitCommentForm === false) {
         setTimeout(commentVerifyReCaptcha, 1)
       }
-      return canSubmitCommentForm
+      return false
+      // return canSubmitCommentForm
     })
 
     const recaptchaTextElement = document.createElement('div')
