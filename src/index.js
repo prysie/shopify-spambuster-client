@@ -227,9 +227,6 @@ const manasloopSpambuster = () => {
       return canSubmitCommentForm
     })
 
-    console.log('HERE')
-    console.log($newCommentForm)
-
     const recaptchaTextElement = document.createElement('div')
     recaptchaTextElement.className = 'mssb-rc-text'
     recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
