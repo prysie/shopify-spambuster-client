@@ -80,6 +80,10 @@ const manasloopSpambuster = () => {
   const $contactForm = document.querySelectorAll('form.contact-form')
   const $signupForm = document.querySelectorAll('#RegisterForm')
   const $loginForm = document.querySelectorAll('#customer_login')
+  console.log($newCommentForm)
+  console.log($contactForm)
+  console.log($signupForm)
+  console.log($loginForm)
 
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
