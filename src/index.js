@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 const manasloopSpambuster = () => {
-  console.log('Spambuster v2.2.5 - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.2.6 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://a8w3q11yde.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ykrlxfdod7.execute-api.eu-west-1.amazonaws.com/dev',
@@ -100,10 +100,6 @@ const manasloopSpambuster = () => {
             const commentEmail = $newCommentForm[0].querySelectorAll('input[name="comment[email]"]')[0].value
             const commentBody = $newCommentForm[0].querySelectorAll('textarea[name="comment[body]"]')[0].value
 
-            console.log(commentName)
-            console.log(commentEmail)
-            console.log(commentBody)
-
             const data = {
               shop: shop,
               token: token,
@@ -112,14 +108,12 @@ const manasloopSpambuster = () => {
 
             mnslpPost(BACKEND_URL + '/verify', data, (error, data) => {
               if (error !== null) {
-                console.log('ERROR!')
                 throw new Error(error)
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 canSubmitCommentForm = true
-                console.log('ok')
-                // $newCommentForm[0].submit()
+                $newCommentForm[0].submit()
               } else {
                 window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -228,8 +222,6 @@ const manasloopSpambuster = () => {
         event.preventDefault()
         event.stopPropagation()
       }
-      event.preventDefault()
-      event.stopPropagation()
     })
 
     const recaptchaTextElement = document.createElement('div')
@@ -243,15 +235,15 @@ const manasloopSpambuster = () => {
   if ($contactForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
-    $contactForm[0].addEventListener('submit', function (e) {
+    $contactForm[0].addEventListener('submit', function (event) {
       const middleMan = function () {
-        contactVerifyReCaptcha(e.target)
+        contactVerifyReCaptcha(event.target)
       }
 
       setTimeout(middleMan, 1)
 
-      return false // The submit called from the contactVerifyReCaptcha function does not trigger this handler
-      // This means that the form can only be submitted if it
+      event.preventDefault()
+      event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
     })
 
     const recaptchaTextElement = document.createElement('div')
@@ -265,11 +257,12 @@ const manasloopSpambuster = () => {
   if ($signupForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
-    $signupForm[0].addEventListener('submit', function () {
+    $signupForm[0].addEventListener('submit', function (event) {
       if (canSubmitSignupForm === false) {
         setTimeout(signupVerifyReCaptcha, 1)
+        event.preventDefault()
+        event.stopPropagation()
       }
-      return canSubmitSignupForm
     })
 
     const recaptchaTextElement = document.createElement('div')
@@ -283,11 +276,12 @@ const manasloopSpambuster = () => {
   if ($loginForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
-    $loginForm[0].addEventListener('submit', function () {
+    $loginForm[0].addEventListener('submit', function (event) {
       if (canSubmitLoginForm === false) {
         setTimeout(loginVerifyReCaptcha, 1)
+        event.preventDefault()
+        event.stopPropagation()
       }
-      return canSubmitLoginForm
     })
 
     const recaptchaTextElement = document.createElement('div')
