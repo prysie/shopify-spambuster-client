@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 const manasloopSpambuster = () => {
-  console.log('Spambuster v2.2.3 - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.2.4 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://a8w3q11yde.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ykrlxfdod7.execute-api.eu-west-1.amazonaws.com/dev',
@@ -186,7 +186,8 @@ const manasloopSpambuster = () => {
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
-                $verifyForm[0].submit()
+                console.log('STOP!')
+                // $verifyForm[0].submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -221,12 +222,12 @@ const manasloopSpambuster = () => {
 
   if ($newCommentForm.length > 0) {
     hasForm = true
-    $newCommentForm[0].addEventListener('submit', function () {
+    $newCommentForm[0].addEventListener('submit', function (event) {
       if (canSubmitCommentForm === false) {
         setTimeout(commentVerifyReCaptcha, 1)
+        event.preventDefault()
       }
-      return false
-      // return canSubmitCommentForm
+      event.preventDefault()
     })
 
     const recaptchaTextElement = document.createElement('div')
