@@ -35,11 +35,6 @@ const manasloopSpambuster = () => {
     ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
     ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.' +
     '</div>' */
-  const recaptchaTextElement = document.createElement('div')
-  recaptchaTextElement.className = 'mssb-rc-text'
-  recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-    ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-    ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
 
   let hasForm = false
   let canSubmitCommentForm = false
@@ -232,6 +227,11 @@ const manasloopSpambuster = () => {
       return canSubmitCommentForm
     })
 
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
     $newCommentForm[0].appendChild(recaptchaTextElement)
   }
 
@@ -249,6 +249,11 @@ const manasloopSpambuster = () => {
       // This means that the form can only be submitted if it
     })
 
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
     $contactForm[0].appendChild(recaptchaTextElement)
   }
 
@@ -262,6 +267,11 @@ const manasloopSpambuster = () => {
       return canSubmitSignupForm
     })
 
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
     $signupForm[0].appendChild(recaptchaTextElement)
   }
 
@@ -275,6 +285,11 @@ const manasloopSpambuster = () => {
       return canSubmitLoginForm
     })
 
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
     $loginForm[0].appendChild(recaptchaTextElement)
   }
 
