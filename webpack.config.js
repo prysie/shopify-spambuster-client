@@ -1,8 +1,16 @@
 const path = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = (env, argv) => {
   if (argv.mode === 'production') {
     return {
+      resolve: {
+        fallback: {
+          crypto: require.resolve('crypto-browserify'),
+          buffer: require.resolve('buffer/'),
+          stream: require.resolve('stream-browserify')
+        }
+      },
       context: path.resolve(__dirname, 'src'),
       entry: [
         './index.js'
@@ -16,10 +24,21 @@ module.exports = (env, argv) => {
       module: {
         rules: []
       },
-      plugins: []
+      optimization: {
+        minimizer: [new TerserPlugin({
+          extractComments: false
+        })]
+      }
     }
   } else {
     return {
+      resolve: {
+        fallback: {
+          crypto: require.resolve('crypto-browserify'),
+          buffer: require.resolve('buffer/'),
+          stream: require.resolve('stream-browserify')
+        }
+      },
       context: path.resolve(__dirname, 'src'),
       entry: [
         './index.js'
@@ -33,7 +52,11 @@ module.exports = (env, argv) => {
       module: {
         rules: []
       },
-      plugins: []
+      optimization: {
+        minimizer: [new TerserPlugin({
+          extractComments: false
+        })]
+      }
     }
   }
 }
