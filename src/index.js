@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 const manasloopSpambuster = () => {
-  console.log('Spambuster v2.2.8a - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.2.8b - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://a8w3q11yde.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ykrlxfdod7.execute-api.eu-west-1.amazonaws.com/dev',
@@ -182,7 +182,7 @@ const manasloopSpambuster = () => {
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 console.log($verifyForm)
-                $verifyForm[0].submit()
+                $verifyForm.submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
