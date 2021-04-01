@@ -236,8 +236,10 @@ const manasloopSpambuster = () => {
     hasForm = true
 
     $contactForm[0].addEventListener('submit', function (event) {
+      const target = event.target
+
       const middleMan = function () {
-        contactVerifyReCaptcha(event.target)
+        contactVerifyReCaptcha(target)
       }
 
       setTimeout(middleMan, 1)
