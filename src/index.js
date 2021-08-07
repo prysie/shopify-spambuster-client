@@ -4,7 +4,7 @@ const manasloopSpambuster = () => {
   console.log('Spambuster v2.2.10 - ' + process.env.NODE_ENV)
 
   const config = {
-    BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://a8w3q11yde.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ewwntzz1i2.execute-api.eu-west-1.amazonaws.com/dev/',
+    BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://qorqmyn3zb.execute-api.eu-west-1.amazonaws.com/prod/' : 'https://ewwntzz1i2.execute-api.eu-west-1.amazonaws.com/dev/',
     SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
   }
 
