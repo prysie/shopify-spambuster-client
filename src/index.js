@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 const manasloopSpambuster = () => {
-  console.log('Spambuster v2.2.10 - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.3.00 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://qorqmyn3zb.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ewwntzz1i2.execute-api.eu-west-1.amazonaws.com/dev',
@@ -26,7 +26,6 @@ const manasloopSpambuster = () => {
     xhr.send(JSON.stringify(data))
   }
 
-  const SCRIPTSRC = config.SCRIPTSRC
   const BACKEND_URL = config.BACKEND_URL
   const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
   /* const RECAPTCHA_TEXT = '' +
@@ -43,21 +42,12 @@ const manasloopSpambuster = () => {
 
   const shop = window.Shopify.shop
 
-  const scripts = document.getElementsByTagName('script')
   let rcSiteKey = ''
   let contactEnabled = ''
-  for (let i = 0; i < scripts.length; i++) {
-    const scriptSrcSegs = scripts[i].src.split('/')
-    const script = scriptSrcSegs[scriptSrcSegs.length - 1]
-    const src = script.substring(0, script.indexOf('?'))
-    if (src === SCRIPTSRC) {
-      rcSiteKey = script.substring((src + '?rcSiteKey=').length)
-      rcSiteKey = rcSiteKey.substring(0, rcSiteKey.indexOf('&'))
 
-      const index = script.indexOf('contactEnabled=')
-      contactEnabled = index > -1 ? script.substring(index + 'contactEnabled='.length, script.indexOf('&', index)) === 'true' : false
-    }
-  }
+  var scriptTag = document.getElementById('spambuster')
+  rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
+  contactEnabled = scriptTag.getAttribute('data-contactEnabled')
 
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
