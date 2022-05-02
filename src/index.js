@@ -48,28 +48,23 @@ const manasloopSpambuster = () => {
   // var scriptTag = document.getElementById('spambuster')
   // rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
   // contactEnabled = scriptTag.getAttribute('data-contactEnabled')
-  window.Shopify.ready(function () {
-    try {
-      window.Shopify.execute(shop)
-        .then(function () {
-          const data = {
-            shop: shop
-          }
-
-          mnslpPost(BACKEND_URL + '/queryForParams', data, (error, data) => {
-            if (error !== null) {
-              throw new Error(error)
-            }
-            data = JSON.parse(data)
-            rcSiteKey = data.rcSiteKey
-            contactEnabled = data.contactEnabled
-          })
-        })
-    } catch (error) {
-      console.error(error)
-      window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
+  try {
+    const data = {
+      shop: shop
     }
-  })
+
+    mnslpPost(BACKEND_URL + '/queryForParams', data, (error, data) => {
+      if (error !== null) {
+        throw new Error(error)
+      }
+      data = JSON.parse(data)
+      rcSiteKey = data.rcSiteKey
+      contactEnabled = data.contactEnabled
+    })
+  } catch (error) {
+    console.error(error)
+    window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
+  }
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
