@@ -45,11 +45,11 @@ const manasloopSpambuster = () => {
   let rcSiteKey = ''
   let contactEnabled = ''
 
-  //var scriptTag = document.getElementById('spambuster')
-  //rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
-  //contactEnabled = scriptTag.getAttribute('data-contactEnabled')
+  // var scriptTag = document.getElementById('spambuster')
+  // rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
+  // contactEnabled = scriptTag.getAttribute('data-contactEnabled')
   const data = {
-    shop: shop,
+    shop: shop
   }
 
   mnslpPost(BACKEND_URL + '/queryForParams', data, (error, data) => {
@@ -58,8 +58,8 @@ const manasloopSpambuster = () => {
     }
     data = JSON.parse(data)
     rcSiteKey = data.rcSiteKey
+    contactEnabled = data.contactEnabled
   })
-  
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
