@@ -48,17 +48,27 @@ const manasloopSpambuster = () => {
   // var scriptTag = document.getElementById('spambuster')
   // rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
   // contactEnabled = scriptTag.getAttribute('data-contactEnabled')
-  const data = {
-    shop: shop
-  }
+  window.Shopify.ready(function () {
+    try {
+      window.Shopify.execute(shop)
+        .then(function () {
+          const data = {
+            shop: shop
+          }
 
-  mnslpPost(BACKEND_URL + '/queryForParams', data, (error, data) => {
-    if (error !== null) {
-      throw new Error(error)
+          mnslpPost(BACKEND_URL + '/queryForParams', data, (error, data) => {
+            if (error !== null) {
+              throw new Error(error)
+            }
+            data = JSON.parse(data)
+            rcSiteKey = data.rcSiteKey
+            contactEnabled = data.contactEnabled
+          })
+        })
+    } catch (error) {
+      console.error(error)
+      window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
     }
-    data = JSON.parse(data)
-    rcSiteKey = data.rcSiteKey
-    contactEnabled = data.contactEnabled
   })
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
