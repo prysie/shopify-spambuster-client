@@ -60,7 +60,7 @@ const manasloopSpambuster = () => {
     })
   } catch (error) {
     console.error(error)
-    window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
+    window.alert('Error retrieving rcSiteKey for Google ReCaptcha. Please try again at a later time.')
   }
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
