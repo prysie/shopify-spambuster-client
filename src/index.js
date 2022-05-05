@@ -45,9 +45,6 @@ const manasloopSpambuster = () => {
   let rcSiteKey = ''
   let contactEnabled = ''
 
-  // var scriptTag = document.getElementById('spambuster')
-  // rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
-  // contactEnabled = scriptTag.getAttribute('data-contactEnabled')
   try {
     const data = {
       shop: shop
