@@ -27,7 +27,8 @@ const manasloopSpambuster = () => {
   }
 
   const BACKEND_URL = config.BACKEND_URL
-  const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
+  // const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
+  const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js?'
   /* const RECAPTCHA_TEXT = '' +
     '<div class="mssb-rc-text">' +
     'This site is protected by reCAPTCHA and the Google' +
@@ -69,14 +70,15 @@ const manasloopSpambuster = () => {
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
   // Shopify CSP headers are set to report scripts but still allow them to run
-  const nonce = 'this_is_my_nonce'
-  const scriptNode = document.createElement('script')
+   const nonce = 'this_is_my_nonce'
+   const scriptNode = document.createElement('script')
   // scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
-  // console.log('Render URL: ' + scriptNode.src)
-  // scriptNode.type = 'text/javascript'
-  // scriptNode.charset = 'utf-8'
-  // scriptNode.nonce = nonce
-  // document.getElementsByTagName('head')[0].appendChild(scriptNode)
+  scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?onload=' + 'onloadCallback' + '&render=' + 'explicit'
+  console.log('Render URL: ' + scriptNode.src)
+  scriptNode.type = 'text/javascript'
+  scriptNode.charset = 'utf-8'
+  scriptNode.nonce = nonce
+  document.getElementsByTagName('head')[0].appendChild(scriptNode)
 
   const $newCommentForm = document.querySelectorAll('#comment_form')
   const $contactForm = document.querySelectorAll('form.contact-form')
