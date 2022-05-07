@@ -43,28 +43,29 @@ const manasloopSpambuster = () => {
 
   const shop = window.Shopify.shop
 
-  let rcSiteKey = ''
-  let contactEnabled = ''
+  let rcSiteKey = null
+  let contactEnabled = null
 
   // var scriptTag = document.getElementById('spambuster')
   // rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
   // contactEnabled = scriptTag.getAttribute('data-contactEnabled')
-  try {
-    const data = {
-      shop: shop
-    }
-
-    mnslpPost(BACKEND_URL + '/queryForParams', data, true, (error, data) => {
-      if (error !== null) {
-        throw new Error(error)
+  if (rcSiteKey === null) {
+    try {
+      const data = {
+        shop: shop
       }
-      data = JSON.parse(data)
-      rcSiteKey = data.rcSiteKey
-      contactEnabled = data.contactEnabled
-    })
-  } catch (error) {
-    console.error(error)
-    window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
+      mnslpPost(BACKEND_URL + '/queryForParams', data, false, (error, data) => {
+        if (error !== null) {
+          throw new Error(error)
+        }
+        data = JSON.parse(data)
+        rcSiteKey = data.rcSiteKey
+        contactEnabled = data.contactEnabled
+      })
+    } catch (error) {
+      console.error(error)
+      window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
+    }
   }
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
@@ -103,7 +104,7 @@ const manasloopSpambuster = () => {
 
     window.grecaptcha.ready(function () {
       try {
-        window.grecaptcha.render({ sitekey: rcSiteKey, action: 'blog_comment' })
+        window.grecaptcha.execute(rcSiteKey, { action: 'blog_comment' })
           .then(function (token) {
             const commentName = $newCommentForm[0].querySelectorAll('input[name="comment[author]"]')[0].value
             const commentEmail = $newCommentForm[0].querySelectorAll('input[name="comment[email]"]')[0].value
