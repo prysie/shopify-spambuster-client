@@ -70,8 +70,8 @@ const manasloopSpambuster = () => {
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
   // Shopify CSP headers are set to report scripts but still allow them to run
-   const nonce = 'this_is_my_nonce'
-   const scriptNode = document.createElement('script')
+  const nonce = 'this_is_my_nonce'
+  const scriptNode = document.createElement('script')
   // scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
   scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?onload=' + 'onloadCallback' + '&render=' + 'explicit'
   console.log('Render URL: ' + scriptNode.src)
