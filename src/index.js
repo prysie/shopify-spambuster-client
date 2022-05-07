@@ -73,8 +73,8 @@ const manasloopSpambuster = () => {
   // Shopify CSP headers are set to report scripts but still allow them to run
   const nonce = 'this_is_my_nonce'
   const scriptNode = document.createElement('script')
-  // scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
-  scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?onload=' + 'onloadCallback' + '&render=' + 'explicit'
+  scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
+  // scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?onload=' + 'onloadCallback' + '&render=' + 'explicit'
   console.log('Render URL: ' + scriptNode.src)
   scriptNode.type = 'text/javascript'
   scriptNode.charset = 'utf-8'
