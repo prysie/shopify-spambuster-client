@@ -53,7 +53,7 @@ const manasloopSpambuster = () => {
       shop: shop
     }
 
-    mnslpPost(BACKEND_URL + '/queryForParams', data, false, (error, data) => {
+    mnslpPost(BACKEND_URL + '/queryForParams', data, true, (error, data) => {
       if (error !== null) {
         throw new Error(error)
       }
@@ -71,12 +71,12 @@ const manasloopSpambuster = () => {
   // Shopify CSP headers are set to report scripts but still allow them to run
   const nonce = 'this_is_my_nonce'
   const scriptNode = document.createElement('script')
-  scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
-  console.log('Render URL: ' + scriptNode.src)
-  scriptNode.type = 'text/javascript'
-  scriptNode.charset = 'utf-8'
-  scriptNode.nonce = nonce
-  document.getElementsByTagName('head')[0].appendChild(scriptNode)
+  // scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
+  // console.log('Render URL: ' + scriptNode.src)
+  // scriptNode.type = 'text/javascript'
+  // scriptNode.charset = 'utf-8'
+  // scriptNode.nonce = nonce
+  // document.getElementsByTagName('head')[0].appendChild(scriptNode)
 
   const $newCommentForm = document.querySelectorAll('#comment_form')
   const $contactForm = document.querySelectorAll('form.contact-form')
@@ -120,7 +120,9 @@ const manasloopSpambuster = () => {
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 canSubmitCommentForm = true
-                $newCommentForm[0].submit()
+                $newCommentForm[0].submit(function (e) {
+                  e.preventDefault()
+                })
               } else {
                 window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -188,7 +190,9 @@ const manasloopSpambuster = () => {
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
-                $verifyForm.submit()
+                $verifyForm.submit(function (e) {
+                  e.preventDefault()
+                })
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -207,7 +211,9 @@ const manasloopSpambuster = () => {
         console.error(error)
       }
       canSubmitSignupForm = true
-      $signupForm[0].submit()
+      $signupForm[0].submit(function (e) {
+        e.preventDefault()
+      })
     })
   }
 
@@ -217,7 +223,9 @@ const manasloopSpambuster = () => {
         console.error(error)
       }
       canSubmitLoginForm = true
-      $loginForm[0].submit()
+      $loginForm[0].submit(function (e) {
+        e.preventDefault()
+      })
     })
   }
 
