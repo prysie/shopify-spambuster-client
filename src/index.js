@@ -103,7 +103,7 @@ const manasloopSpambuster = () => {
 
     window.grecaptcha.ready(function () {
       try {
-        window.grecaptcha.render({sitekey: rcSiteKey, action: 'blog_comment' })
+        window.grecaptcha.render({ sitekey: rcSiteKey, action: 'blog_comment' })
           .then(function (token) {
             const commentName = $newCommentForm[0].querySelectorAll('input[name="comment[author]"]')[0].value
             const commentEmail = $newCommentForm[0].querySelectorAll('input[name="comment[email]"]')[0].value
