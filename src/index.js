@@ -8,9 +8,9 @@ const manasloopSpambuster = () => {
     SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
   }
 
-  const mnslpPost = (url, data, callback) => {
+  const mnslpPost = (url, data, runasync, callback) => {
     const xhr = new window.XMLHttpRequest()
-    xhr.open('POST', url, true)
+    xhr.open('POST', url, runasync)
     xhr.setRequestHeader('Content-Type', 'application/json')
 
     xhr.onreadystatechange = () => {
@@ -45,12 +45,15 @@ const manasloopSpambuster = () => {
   let rcSiteKey = ''
   let contactEnabled = ''
 
+  // var scriptTag = document.getElementById('spambuster')
+  // rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
+  // contactEnabled = scriptTag.getAttribute('data-contactEnabled')
   try {
     const data = {
       shop: shop
     }
 
-    mnslpPost(BACKEND_URL + '/queryForParams', data, (error, data) => {
+    mnslpPost(BACKEND_URL + '/queryForParams', data, false, (error, data) => {
       if (error !== null) {
         throw new Error(error)
       }
@@ -60,7 +63,7 @@ const manasloopSpambuster = () => {
     })
   } catch (error) {
     console.error(error)
-    window.alert('Error retrieving rcSiteKey for Google ReCaptcha. Please try again at a later time.')
+    window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
   }
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
@@ -69,6 +72,7 @@ const manasloopSpambuster = () => {
   const nonce = 'this_is_my_nonce'
   const scriptNode = document.createElement('script')
   scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
+  console.log('Render URL: ' + scriptNode.src)
   scriptNode.type = 'text/javascript'
   scriptNode.charset = 'utf-8'
   scriptNode.nonce = nonce
@@ -109,7 +113,7 @@ const manasloopSpambuster = () => {
               commentHash: getHash(commentName, commentEmail, commentBody, shop)
             }
 
-            mnslpPost(BACKEND_URL + '/verify', data, (error, data) => {
+            mnslpPost(BACKEND_URL + '/verify', data, true, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
@@ -144,7 +148,7 @@ const manasloopSpambuster = () => {
               token: token
             }
 
-            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
+            mnslpPost(BACKEND_URL + '/verifyonly', true, data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
@@ -178,7 +182,7 @@ const manasloopSpambuster = () => {
               token: token
             }
 
-            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
+            mnslpPost(BACKEND_URL + '/verifyonly', true, data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
