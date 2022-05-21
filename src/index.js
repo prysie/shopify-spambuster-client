@@ -8,9 +8,9 @@ const manasloopSpambuster = () => {
     SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
   }
 
-  const mnslpPost = (url, data, runasync, callback) => {
+  const mnslpPost = (url, data, callback) => {
     const xhr = new window.XMLHttpRequest()
-    xhr.open('POST', url, runasync)
+    xhr.open('POST', url, true)
     xhr.setRequestHeader('Content-Type', 'application/json')
 
     xhr.onreadystatechange = () => {
@@ -27,8 +27,7 @@ const manasloopSpambuster = () => {
   }
 
   const BACKEND_URL = config.BACKEND_URL
-  // const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
-  const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js?'
+  const RECAPTCHA_SCRIPT_SRC = 'https://www.google.com/recaptcha/api.js'
   /* const RECAPTCHA_TEXT = '' +
     '<div class="mssb-rc-text">' +
     'This site is protected by reCAPTCHA and the Google' +
@@ -43,30 +42,13 @@ const manasloopSpambuster = () => {
 
   const shop = window.Shopify.shop
 
-  let rcSiteKey = null
-  let contactEnabled = null
+  let rcSiteKey = ''
+  let contactEnabled = ''
 
-  // var scriptTag = document.getElementById('spambuster')
-  // rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
-  // contactEnabled = scriptTag.getAttribute('data-contactEnabled')
-  if (rcSiteKey === null) {
-    try {
-      const data = {
-        shop: shop
-      }
-      mnslpPost(BACKEND_URL + '/queryForParams', data, false, (error, data) => {
-        if (error !== null) {
-          throw new Error(error)
-        }
-        data = JSON.parse(data)
-        rcSiteKey = data.rcSiteKey
-        contactEnabled = data.contactEnabled
-      })
-    } catch (error) {
-      console.error(error)
-      window.alert('Error retrieving rcSiteKey. Please try again at a later time.')
-    }
-  }
+  var scriptTag = document.getElementById('spambuster')
+  rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
+  contactEnabled = scriptTag.getAttribute('data-contactEnabled')
+
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
@@ -74,8 +56,6 @@ const manasloopSpambuster = () => {
   const nonce = 'this_is_my_nonce'
   const scriptNode = document.createElement('script')
   scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?render=' + rcSiteKey
-  // scriptNode.src = RECAPTCHA_SCRIPT_SRC + '?onload=' + 'onloadCallback' + '&render=' + 'explicit'
-  console.log('Render URL: ' + scriptNode.src)
   scriptNode.type = 'text/javascript'
   scriptNode.charset = 'utf-8'
   scriptNode.nonce = nonce
@@ -116,16 +96,14 @@ const manasloopSpambuster = () => {
               commentHash: getHash(commentName, commentEmail, commentBody, shop)
             }
 
-            mnslpPost(BACKEND_URL + '/verify', data, true, (error, data) => {
+            mnslpPost(BACKEND_URL + '/verify', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
                 canSubmitCommentForm = true
-                $newCommentForm[0].submit(function (e) {
-                  e.preventDefault()
-                })
+                $newCommentForm[0].submit()
               } else {
                 window.alert('The spam protection system did now allow this comment.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -153,7 +131,7 @@ const manasloopSpambuster = () => {
               token: token
             }
 
-            mnslpPost(BACKEND_URL + '/verifyonly', true, data, (error, data) => {
+            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
@@ -187,15 +165,13 @@ const manasloopSpambuster = () => {
               token: token
             }
 
-            mnslpPost(BACKEND_URL + '/verifyonly', true, data, (error, data) => {
+            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
               data = JSON.parse(data)
               if (parseFloat(data.score) > 0.5) {
-                $verifyForm.submit(function (e) {
-                  e.preventDefault()
-                })
+                $verifyForm.submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
               }
@@ -214,9 +190,7 @@ const manasloopSpambuster = () => {
         console.error(error)
       }
       canSubmitSignupForm = true
-      $signupForm[0].submit(function (e) {
-        e.preventDefault()
-      })
+      $signupForm[0].submit()
     })
   }
 
@@ -226,9 +200,7 @@ const manasloopSpambuster = () => {
         console.error(error)
       }
       canSubmitLoginForm = true
-      $loginForm[0].submit(function (e) {
-        e.preventDefault()
-      })
+      $loginForm[0].submit()
     })
   }
 
