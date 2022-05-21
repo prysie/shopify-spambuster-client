@@ -1,11 +1,11 @@
 const sjcl = require('sjcl')
 
-const manasloopSpambuster = () => {
+const jolaSpambuster = () => {
   console.log('Spambuster v2.3.00 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://qorqmyn3zb.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ewwntzz1i2.execute-api.eu-west-1.amazonaws.com/dev',
-    SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'spambuster.js' : 'spambuster-dev.js'
+    SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'app-spambuster.js' : 'app-spambuster-dev.js'
   }
 
   const mnslpPost = (url, data, callback) => {
@@ -45,7 +45,7 @@ const manasloopSpambuster = () => {
   let rcSiteKey = ''
   let contactEnabled = ''
 
-  var scriptTag = document.getElementById('spambuster')
+  var scriptTag = document.getElementById('app-spambuster')
   rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
   contactEnabled = scriptTag.getAttribute('data-contactEnabled')
 
@@ -290,7 +290,7 @@ const manasloopSpambuster = () => {
 }
 
 if (document.readyState !== 'loading') {
-  manasloopSpambuster()
+  jolaSpambuster()
 } else {
-  document.addEventListener('DOMContentLoaded', manasloopSpambuster)
+  document.addEventListener('DOMContentLoaded', jolaSpambuster)
 }

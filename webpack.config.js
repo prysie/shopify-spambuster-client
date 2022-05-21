@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
       ],
       mode: 'production',
       output: {
-        filename: 'spambuster.js',
+        filename: 'app-spambuster.js',
         path: path.resolve(__dirname, 'build'),
         publicPath: '/'
       },
@@ -45,7 +45,7 @@ module.exports = (env, argv) => {
       ],
       mode: 'development',
       output: {
-        filename: 'spambuster-dev.js',
+        filename: 'app-spambuster-dev.js',
         path: path.resolve(__dirname, 'build'),
         publicPath: '/'
       },
