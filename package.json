@@ -1,6 +1,6 @@
 {
-  "name": "shopify-spambuster-client",
-  "version": "2.2.10",
+  "name": "shopify-app-spambuster-client",
+  "version": "2.3.00",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build-dev": "standard && webpack --mode development",
     "build-prod": "standard && webpack --mode production"
   },
-  "author": "Chris Hjorth - contact@chrishjorth.com",
+  "author": "Matthew Pryse - contact@jola.com.au",
   "license": "ISC",
   "devDependencies": {
     "standard": "^14.3.4",
