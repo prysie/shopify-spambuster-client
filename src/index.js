@@ -48,8 +48,6 @@ const jolaSpambuster = () => {
   var scriptTag = document.getElementById('app-spambuster')
   rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
   contactEnabled = scriptTag.getAttribute('data-contactEnabled').valueOf() === 'true'.valueOf()
-  console.log(contactEnabled)
-  console.log(typeof contactEnabled)
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
