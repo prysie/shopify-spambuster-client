@@ -1,14 +1,14 @@
 const sjcl = require('sjcl')
 
 const jolaSpambuster = () => {
-  console.log('Spambuster v2.3.00 - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.3.03 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://qorqmyn3zb.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ewwntzz1i2.execute-api.eu-west-1.amazonaws.com/dev',
     SCRIPTSRC: process.env.NODE_ENV === 'production' ? 'app-spambuster.js' : 'app-spambuster-dev.js'
   }
 
-  const mnslpPost = (url, data, callback) => {
+  const jolaPost = (url, data, callback) => {
     const xhr = new window.XMLHttpRequest()
     xhr.open('POST', url, true)
     xhr.setRequestHeader('Content-Type', 'application/json')
@@ -18,7 +18,7 @@ const jolaSpambuster = () => {
         if (xhr.status === 200) {
           callback(null, xhr.responseText)
         } else {
-          const error = 'mnslpPost request failed.'
+          const error = 'jolaPost request failed.'
           callback(error)
         }
       }
@@ -48,7 +48,8 @@ const jolaSpambuster = () => {
   var scriptTag = document.getElementById('app-spambuster')
   rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
   contactEnabled = scriptTag.getAttribute('data-contactEnabled')
-
+  console.log(contactEnabled)
+  console.log(typeof contactEnabled)
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
@@ -96,7 +97,7 @@ const jolaSpambuster = () => {
               commentHash: getHash(commentName, commentEmail, commentBody, shop)
             }
 
-            mnslpPost(BACKEND_URL + '/verify', data, (error, data) => {
+            jolaPost(BACKEND_URL + '/verify', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
@@ -131,7 +132,7 @@ const jolaSpambuster = () => {
               token: token
             }
 
-            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
+            jolaPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
@@ -165,7 +166,7 @@ const jolaSpambuster = () => {
               token: token
             }
 
-            mnslpPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
+            jolaPost(BACKEND_URL + '/verifyonly', data, (error, data) => {
               if (error !== null) {
                 throw new Error(error)
               }
