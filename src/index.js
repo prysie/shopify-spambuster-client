@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 const jolaSpambuster = () => {
-  console.log('Spambuster v2.3.04 - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.3.05 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://qorqmyn3zb.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ewwntzz1i2.execute-api.eu-west-1.amazonaws.com/dev',
