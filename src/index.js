@@ -39,6 +39,7 @@ const jolaSpambuster = () => {
   let canSubmitCommentForm = false
   let canSubmitSignupForm = false
   let canSubmitLoginForm = false
+  let canSubmitAcctRegisterForm = false
 
   const shop = window.Shopify.shop
 
@@ -64,6 +65,7 @@ const jolaSpambuster = () => {
   const $contactForm = document.querySelectorAll('form.contact-form')
   const $signupForm = document.querySelectorAll('#RegisterForm')
   const $loginForm = document.querySelectorAll('#customer_login')
+  const $acctRegisterForm = document.querySelectorAll('#create_customer')
 
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
@@ -193,6 +195,16 @@ const jolaSpambuster = () => {
     })
   }
 
+  const acctRegisterVerifyReCaptcha = function () {
+    verifyReCaptcha('register', function (error) {
+      if (error !== null) {
+        console.error(error)
+      }
+      canSubmitAcctRegisterForm = true
+      $acctRegisterForm[0].submit()
+    })
+  }
+
   const loginVerifyReCaptcha = function () {
     verifyReCaptcha('login', function (error) {
       if (error !== null) {
@@ -262,6 +274,25 @@ const jolaSpambuster = () => {
       ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
       ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
     $signupForm[0].appendChild(recaptchaTextElement)
+  }
+
+  if ($acctRegisterForm.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $acctRegisterForm[0].addEventListener('submit', function (event) {
+      if (canSubmitAcctRegisterForm === false) {
+        setTimeout(acctRegisterVerifyReCaptcha, 1)
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    })
+
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
+    $acctRegisterForm[0].appendChild(recaptchaTextElement)
   }
 
   if ($loginForm.length > 0 && contactEnabled === true) {
