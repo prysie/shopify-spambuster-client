@@ -40,6 +40,7 @@ const jolaSpambuster = () => {
   let canSubmitSignupForm = false
   let canSubmitLoginForm = false
   let canSubmitAcctRegisterForm = false
+  let canSubmitNewsletterForm = false
 
   const shop = window.Shopify.shop
 
@@ -63,9 +64,11 @@ const jolaSpambuster = () => {
 
   const $newCommentForm = document.querySelectorAll('#comment_form')
   const $contactForm = document.querySelectorAll('form.contact-form')
+  const $contactForm2 = document.querySelectorAll('#ContactForm')
   const $signupForm = document.querySelectorAll('#RegisterForm')
   const $loginForm = document.querySelectorAll('#customer_login')
   const $acctRegisterForm = document.querySelectorAll('#create_customer')
+  const $newsletterForm = document.querySelectorAll('#ContactFooter')
 
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
@@ -205,6 +208,15 @@ const jolaSpambuster = () => {
     })
   }
 
+  const newsletterVerifyReCaptcha = function () {
+    verifyReCaptcha('newsletter', function (error) {
+      if (error !== null) {
+        console.error(error)
+      }
+      canSubmitNewsletterForm = true
+      $newsletterForm[0].submit()
+    })
+  }
   const loginVerifyReCaptcha = function () {
     verifyReCaptcha('login', function (error) {
       if (error !== null) {
@@ -257,6 +269,30 @@ const jolaSpambuster = () => {
     $contactForm[0].appendChild(recaptchaTextElement)
   }
 
+  if ($contactForm2.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $contactForm2[0].addEventListener('submit', function (event) {
+      const target = event.target
+
+      const middleMan = function () {
+        contactVerifyReCaptcha(target)
+      }
+
+      setTimeout(middleMan, 1)
+
+      event.preventDefault()
+      event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
+    })
+
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
+    $contactForm2[0].appendChild(recaptchaTextElement)
+  }
+
   if ($signupForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
@@ -293,6 +329,25 @@ const jolaSpambuster = () => {
       ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
       ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
     $acctRegisterForm[0].appendChild(recaptchaTextElement)
+  }
+
+  if ($newsletterForm.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $newsletterForm[0].addEventListener('submit', function (event) {
+      if (canSubmitNewsletterForm === false) {
+        setTimeout(newsletterVerifyReCaptcha, 1)
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    })
+
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
+    $newsletterForm[0].appendChild(recaptchaTextElement)
   }
 
   if ($loginForm.length > 0 && contactEnabled === true) {
