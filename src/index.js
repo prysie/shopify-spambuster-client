@@ -41,15 +41,21 @@ const jolaSpambuster = () => {
   let canSubmitLoginForm = false
   let canSubmitAcctRegisterForm = false
   let canSubmitNewsletterForm = false
+  let canRecoverPasswordForm = false
 
   const shop = window.Shopify.shop
 
   let rcSiteKey = ''
   let contactEnabled = ''
+  let spamThreshold = 0.5
 
   var scriptTag = document.getElementById('app-spambuster')
   rcSiteKey = scriptTag.getAttribute('data-rcSiteKey')
   contactEnabled = scriptTag.getAttribute('data-contactEnabled').valueOf() === 'true'.valueOf()
+  if (scriptTag.getAttribute('data-spamThreshold')) {
+    spamThreshold = scriptTag.getAttribute('data-spamThreshold')
+    console.log('Using override spam threashold of ' + spamThreshold)
+  }
   // https://developers.google.com/recaptcha/docs/faq
   // https://github.com/google/google-api-javascript-client/issues/397
   // https://community.shopify.com/c/Technical-Q-A/GTM-on-Shopify-Plus-store-now-Reporting-CSP-issues/m-p/666613
@@ -64,11 +70,13 @@ const jolaSpambuster = () => {
 
   const $newCommentForm = document.querySelectorAll('#comment_form')
   const $contactForm = document.querySelectorAll('form.contact-form')
+  const $contactForm3 = document.querySelectorAll('.contact-form__form')
   const $contactForm2 = document.querySelectorAll('#ContactForm')
   const $signupForm = document.querySelectorAll('#RegisterForm')
   const $loginForm = document.querySelectorAll('#customer_login')
   const $acctRegisterForm = document.querySelectorAll('#create_customer')
   const $newsletterForm = document.querySelectorAll('#ContactFooter')
+  const $recoverPasswordForm = document.querySelectorAll('#RecoverPasswordForm')
 
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
@@ -105,7 +113,7 @@ const jolaSpambuster = () => {
                 throw new Error(error)
               }
               data = JSON.parse(data)
-              if (parseFloat(data.score) > 0.5) {
+              if (parseFloat(data.score) > spamThreshold) {
                 canSubmitCommentForm = true
                 $newCommentForm[0].submit()
               } else {
@@ -140,7 +148,7 @@ const jolaSpambuster = () => {
                 throw new Error(error)
               }
               data = JSON.parse(data)
-              if (parseFloat(data.score) > 0.5) {
+              if (parseFloat(data.score) > spamThreshold) {
                 callback(null)
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
@@ -174,7 +182,7 @@ const jolaSpambuster = () => {
                 throw new Error(error)
               }
               data = JSON.parse(data)
-              if (parseFloat(data.score) > 0.5) {
+              if (parseFloat(data.score) > spamThreshold) {
                 $verifyForm.submit()
               } else {
                 window.alert('The spam protection system did now allow this submission.\nIf this is not spam please verify your internet connection or contact us via email.')
@@ -195,6 +203,16 @@ const jolaSpambuster = () => {
       }
       canSubmitSignupForm = true
       $signupForm[0].submit()
+    })
+  }
+
+  const passwordVerifyReCaptcha = function () {
+    verifyReCaptcha('password_reset', function (error) {
+      if (error !== null) {
+        console.error(error)
+      }
+      canRecoverPasswordForm = true
+      $recoverPasswordForm[0].submit()
     })
   }
 
@@ -293,6 +311,30 @@ const jolaSpambuster = () => {
     $contactForm2[0].appendChild(recaptchaTextElement)
   }
 
+  if ($contactForm3.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $contactForm3[0].addEventListener('submit', function (event) {
+      const target = event.target
+
+      const middleMan = function () {
+        contactVerifyReCaptcha(target)
+      }
+
+      setTimeout(middleMan, 1)
+
+      event.preventDefault()
+      event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
+    })
+
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
+    $contactForm3[0].appendChild(recaptchaTextElement)
+  }
+
   if ($signupForm.length > 0 && contactEnabled === true) {
     hasForm = true
 
@@ -348,6 +390,25 @@ const jolaSpambuster = () => {
       ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
       ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
     $newsletterForm[0].appendChild(recaptchaTextElement)
+  }
+
+  if ($recoverPasswordForm.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $recoverPasswordForm[0].addEventListener('submit', function (event) {
+      if (canRecoverPasswordForm === false) {
+        setTimeout(passwordVerifyReCaptcha, 1)
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    })
+
+    const recaptchaTextElement = document.createElement('div')
+    recaptchaTextElement.className = 'mssb-rc-text'
+    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
+    $recoverPasswordForm[0].appendChild(recaptchaTextElement)
   }
 
   if ($loginForm.length > 0 && contactEnabled === true) {
