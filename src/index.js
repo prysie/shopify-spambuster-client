@@ -1,7 +1,7 @@
 const sjcl = require('sjcl')
 
 const jolaSpambuster = () => {
-  console.log('Spambuster v2.3.05 - ' + process.env.NODE_ENV)
+  console.log('Spambuster v2.3.08 - ' + process.env.NODE_ENV)
 
   const config = {
     BACKEND_URL: process.env.NODE_ENV === 'production' ? 'https://qorqmyn3zb.execute-api.eu-west-1.amazonaws.com/prod' : 'https://ewwntzz1i2.execute-api.eu-west-1.amazonaws.com/dev',
@@ -77,6 +77,8 @@ const jolaSpambuster = () => {
   const $acctRegisterForm = document.querySelectorAll('#create_customer')
   const $newsletterForm = document.querySelectorAll('#ContactFooter')
   const $recoverPasswordForm = document.querySelectorAll('#RecoverPasswordForm')
+  const $contactForm4 = document.querySelectorAll('#contact_form')
+  const $contactForm5 = document.querySelectorAll('#contact_form > div')
 
   // We generate the hash locally because we do not want to send user data to our servers.
   // If the same person makes the same comment on the site we have a collision ->
@@ -126,6 +128,19 @@ const jolaSpambuster = () => {
         window.alert('Error posting the comment. Please try again at a later time.')
       }
     })
+  }
+
+  const appendRecaptchaMessage = (formElement) => {
+    // const existingMessage = formElement.querySelector('.mssb-rc-text')
+    const existingMessage = document.querySelector('.mssb-rc-text')
+    if (!existingMessage) {
+      const recaptchaTextElement = document.createElement('div')
+      recaptchaTextElement.className = 'mssb-rc-text'
+      recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
+        ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
+        ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
+      formElement.appendChild(recaptchaTextElement)
+    }
   }
 
   const verifyReCaptcha = function (action, callback) {
@@ -254,13 +269,7 @@ const jolaSpambuster = () => {
         event.stopPropagation()
       }
     })
-
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $newCommentForm[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($newCommentForm[0])
   }
 
   if ($contactForm.length > 0 && contactEnabled === true) {
@@ -279,12 +288,7 @@ const jolaSpambuster = () => {
       event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
     })
 
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $contactForm[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($contactForm[0])
   }
 
   if ($contactForm2.length > 0 && contactEnabled === true) {
@@ -303,12 +307,7 @@ const jolaSpambuster = () => {
       event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
     })
 
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $contactForm2[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($contactForm2[0])
   }
 
   if ($contactForm3.length > 0 && contactEnabled === true) {
@@ -327,12 +326,45 @@ const jolaSpambuster = () => {
       event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
     })
 
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $contactForm3[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($contactForm3[0])
+  }
+
+  if ($contactForm4.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $contactForm4[0].addEventListener('submit', function (event) {
+      const target = event.target
+
+      const middleMan = function () {
+        contactVerifyReCaptcha(target)
+      }
+
+      setTimeout(middleMan, 1)
+
+      event.preventDefault()
+      event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
+    })
+
+    appendRecaptchaMessage($contactForm4[0])
+  }
+
+  if ($contactForm5.length > 0 && contactEnabled === true) {
+    hasForm = true
+
+    $contactForm5[0].addEventListener('submit', function (event) {
+      const target = event.target
+
+      const middleMan = function () {
+        contactVerifyReCaptcha(target)
+      }
+
+      setTimeout(middleMan, 1)
+
+      event.preventDefault()
+      event.stopPropagation() // The submit called from the contactVerifyReCaptcha function does not trigger this handler
+    })
+
+    appendRecaptchaMessage($contactForm5[0])
   }
 
   if ($signupForm.length > 0 && contactEnabled === true) {
@@ -346,12 +378,7 @@ const jolaSpambuster = () => {
       }
     })
 
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $signupForm[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($signupForm[0])
   }
 
   if ($acctRegisterForm.length > 0 && contactEnabled === true) {
@@ -364,13 +391,7 @@ const jolaSpambuster = () => {
         event.stopPropagation()
       }
     })
-
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $acctRegisterForm[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($acctRegisterForm[0])
   }
 
   if ($newsletterForm.length > 0 && contactEnabled === true) {
@@ -383,13 +404,7 @@ const jolaSpambuster = () => {
         event.stopPropagation()
       }
     })
-
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $newsletterForm[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($newsletterForm[0])
   }
 
   if ($recoverPasswordForm.length > 0 && contactEnabled === true) {
@@ -402,13 +417,7 @@ const jolaSpambuster = () => {
         event.stopPropagation()
       }
     })
-
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $recoverPasswordForm[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($recoverPasswordForm[0])
   }
 
   if ($loginForm.length > 0 && contactEnabled === true) {
@@ -421,13 +430,7 @@ const jolaSpambuster = () => {
         event.stopPropagation()
       }
     })
-
-    const recaptchaTextElement = document.createElement('div')
-    recaptchaTextElement.className = 'mssb-rc-text'
-    recaptchaTextElement.innerHTML = 'This site is protected by reCAPTCHA and the Google' +
-      ' <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and' +
-      ' <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.'
-    $loginForm[0].appendChild(recaptchaTextElement)
+    appendRecaptchaMessage($loginForm[0])
   }
 
   if (hasForm === true) {
